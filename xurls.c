@@ -13,6 +13,12 @@ int main(int argc, char *argv[]) {
     char *regex = "\\bhttp://(.*)\\b";
     int cflags = REG_EXTENDED | REG_ICASE;
     int comp_error = regcomp(&reg, regex, cflags);
+    if (comp_error == -1) {
+        char buf[200];
+        regerror(comp_error, &reg, buf, 200);
+        fprintf(stderr, "%s\n", buf);
+        return 1;
+    }
     regmatch_t matches[10];
     int exec_error = regexec(&reg, argv[1], 10, matches, 0);  
     if (exec_error) {
